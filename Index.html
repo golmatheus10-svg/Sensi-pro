@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensi VIP Elite - Vendas</title>
+    <style>
+        :root { 
+            --red: #ff3c3c; 
+            --green: #00ff88; 
+            --blue: #00d9ff; 
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body { 
+            background-color: var(--bg); color: white; 
+            font-family: 'Segoe UI', sans-serif; margin: 0;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%);
+        }
+
+        .box { 
+            width: 90%; max-width: 380px; border: 1px solid rgba(255, 60, 60, 0.3); 
+            border-radius: 25px; padding: 30px; background: var(--glass);
+            backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            text-align: center; transition: 0.5s;
+        }
+
+        #login-screen { display: block; }
+        #app-screen { display: none; opacity: 0; transform: translateY(20px); }
+
+        h1 { font-size: 1.5em; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; }
+        h1 span { color: var(--red); text-shadow: 0 0 15px var(--red); font-weight: 900; }
+
+        input, select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #333; 
+            background: rgba(0,0,0,0.5); color: white; margin-bottom: 15px; box-sizing: border-box; outline: none;
+        }
+
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 12px; border: none; 
+            background: linear-gradient(45deg, #cc0000, #ff3c3c); 
+            color: white; font-weight: 900; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(255, 60, 60, 0.4); margin-bottom: 10px;
+        }
+
+        .btn-opt { background: linear-gradient(45deg, #0066cc, #00d9ff); box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3); }
+
+        #resultado { display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .card b { font-size: 1.6em; color: var(--green); text-shadow: 0 0 10px var(--green); }
+
+        #loader { display: none; margin: 20px 0; }
+        .bar-bg { width: 100%; background: #111; height: 6px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { width: 0%; height: 100%; background: var(--red); transition: 2s linear; }
+    </style>
+</head>
+<body>
+
+    <div class="box" id="login-screen">
+        <h1>LOGIN <span>VIP</span></h1>
+        <input type="text" id="user" placeholder="Login">
+        <input type="password" id="pass" placeholder="Senha">
+        <button class="btn" onclick="fazerLogin()">Entrar</button>
+        <p id="error" style="color:var(--red); display:none; font-size: 0.8em;">Acesso Negado!</p>
+    </div>
+
+    <div class="box" id="app-screen">
+        <h1>SENSI <span>ELITE</span></h1>
+        
+        <input type="text" id="busca" onkeyup="filtrar()" placeholder="🔎 Seu modelo...">
+        
+        <select id="aparelho" size="3">
+            <option value="Samsung" selected>Galaxy S9 Plus (Seu)</option>
+            <option value="Samsung">Linha Galaxy A / S</option>
+            <option value="iPhone">iPhone (iOS)</option>
+        </select>
+
+        <button class="btn btn-opt" id="btn-opt" onclick="otimizar()">Otimizar Celular</button>
+
+        <div id="loader">
+            <p id="status-txt" style="font-size: 0.6em; color: var(--red);">PROCESSANDO...</p>
+            <div class="bar-bg"><div class="bar-fill" id="fill"></div></div>
+        </div>
+
+        <div id="resultado">
+            <div class="card"><label>GERAL</label><br><b id="g">0</b></div>
+            <div class="card"><label>RED DOT</label><br><b id="rd">0</b></div>
+            <div class="card"><label>MIRA 2X</label><br><b id="m2">0</b></div>
+            <div class="card"><label>MIRA 4X</label><br><b id="m4">0</b></div>
+            <div class="card" style="grid-column: span 2; border-bottom: 2px solid var(--blue);">
+                <label>DPI RECOMENDADA</label><br><b id="dpi" style="color:var(--blue)">0</b>
+            </div>
+        </div>
+
+        <button class="btn" id="btn-gen" onclick="gerarSensi()">Gerar Sensi</button>
+    </div>
+
+<script>
+    function fazerLogin() {
+        const u = document.getElementById("user").value;
+        const p = document.getElementById("pass").value;
+        if(u === "777" && p === "mateus") {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("app-screen").style.display = "block";
+            setTimeout(() => { document.getElementById("app-screen").style.opacity = "1"; }, 50);
+        } else {
+            document.getElementById("error").style.display = "block";
+        }
+    }
+
+    function otimizar() {
+        const btn = document.getElementById("btn-opt");
+        btn.innerText = "LIMPANDO CACHE...";
+        btn.disabled = true;
+        
+        // Simulação de limpeza de memória e otimização de toque
+        setTimeout(() => {
+            alert("Otimização Concluída! FPS Estabilizado e Cache Limpo.");
+            btn.innerText = "SISTEMA OTIMIZADO";
+            btn.style.background = "#00ff88";
+            btn.style.color = "#000";
+        }, 2000);
+    }
+
+    function filtrar() {
+        let input = document.getElementById("busca").value.toUpperCase();
+        let options = document.getElementById("aparelho").getElementsByTagName("option");
+        for (let i = 0; i < options.length; i++) {
+            let txt = options[i].textContent || options[i].innerText;
+            options[i].style.display = txt.toUpperCase().includes(input) ? "" : "none";
+        }
+    }
+
+    function gerarSensi() {
+        const btn = document.getElementById("btn-gen");
+        const loader = document.getElementById("loader");
+        const fill = document.getElementById("fill");
+        const res = document.getElementById("resultado");
+
+        res.style.display = "none";
+        loader.style.display = "block";
+        btn.disabled = true;
+        fill.style.width = "0%";
+
+        setTimeout(() => { fill.style.width = "100%"; }, 100);
+
+        setTimeout(() => {
+            const sortear = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById("g").innerText = sortear(95, 200);
+            document.getElementById("rd").innerText = sortear(90, 198);
+            document.getElementById("m2").innerText = sortear(88, 200);
+            document.getElementById("m4").innerText = sortear(90, 200);
+            document.getElementById("dpi").innerText = sortear(500, 960);
+
+            loader.style.display = "none";
+            res.style.display = "grid";
+            btn.disabled = false;
+            btn.innerText = "NOVA SENSI";
+        }, 2100);
+    }
+</script>
+</body>
+</html>
